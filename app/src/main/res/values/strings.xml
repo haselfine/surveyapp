@@ -6,4 +6,7 @@
     <string name="yes_count_text">0</string>
     <string name="no_count_text">0</string>
     <string name="reset_button_text">Reset</string>
+    <string name="continue_button">Continue Survey</string>
+    <string name="results_label">Results</string>
+    <string name="results_text">First option: /nSecond option:  </string>
 </resources>

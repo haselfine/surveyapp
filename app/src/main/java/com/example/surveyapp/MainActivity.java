@@ -2,6 +2,7 @@ package com.example.surveyapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +18,12 @@ public class MainActivity extends AppCompatActivity {
     Button mYesButton;
     Button mNoButton;
     Button mResetButton;
+    Button mResultsButton;
 
     TextView mYesCountTextView;
     TextView mNoCountTextView;
 
+    String[] mAnswerOptions = new String[2];
     int[] mAnswerCount = new int[2]; //this array holds two integers [0] representing the # of yes's
                                     // and [1] representing the number of no's
 
@@ -70,6 +73,13 @@ public class MainActivity extends AppCompatActivity {
             public  void onClick(View v){
                 mAnswerCount = new int[]{0,0}; //set yes/no back to zero
                 updateAnswers(mAnswerCount);
+            }
+        });
+        mResultsButton = findViewById(R.id.results_button);
+        mResultsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
             }
         });
     }
