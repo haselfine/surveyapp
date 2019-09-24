@@ -13,6 +13,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "SurveyActivity";
     private static final String ANSWER_KEY = "answer-key";
+    public static final String EXTRA_RESULTS = "com.example.surveyapp.results";
+
+    private static final int RESULTS_REQUEST_CODE = 0;
 
 
     Button mYesButton;
@@ -23,11 +26,12 @@ public class MainActivity extends AppCompatActivity {
     TextView mYesCountTextView;
     TextView mNoCountTextView;
 
-    String[] mAnswerOptions = new String[2];
+    StringBuilder mResultsConcat = new StringBuilder();
+    String mResultsString;
+
+    String[] mOptionNames = new String[2];
     int[] mAnswerCount = new int[2]; //this array holds two integers [0] representing the # of yes's
                                     // and [1] representing the number of no's
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,17 +75,46 @@ public class MainActivity extends AppCompatActivity {
         mResetButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public  void onClick(View v){
-                mAnswerCount = new int[]{0,0}; //set yes/no back to zero
-                updateAnswers(mAnswerCount);
+                reset();
             }
         });
         mResultsButton = findViewById(R.id.results_button);
         mResultsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                mOptionNames = setOptionNames();
+                mResultsString = concatText();
+
+                Intent showResultsIntent = new Intent(MainActivity.this, ResultsActivity.class);
+                showResultsIntent.putExtra(EXTRA_RESULTS, mResultsString);
+                Log.d(TAG, "activity started");
+                startActivityForResult(showResultsIntent, RESULTS_REQUEST_CODE);
             }
         });
+    }
+
+    private void reset() {
+        mAnswerCount = new int[]{0,0}; //set yes/no back to zero
+        updateAnswers(mAnswerCount);
+    }
+
+    private String concatText() {
+        if(mOptionNames[0] != null){
+            for(int i = 0; i < mOptionNames.length; i++){
+                mResultsConcat.append(mOptionNames[i]);
+                mResultsConcat.append(": ");
+                mResultsConcat.append(mAnswerCount[i]);
+                mResultsConcat.append("\n");
+            }
+            mResultsConcat.deleteCharAt(mResultsConcat.lastIndexOf("\n"));
+        }
+        return mResultsConcat.toString();
+    }
+
+    private String[] setOptionNames(){
+        mOptionNames[0] = mYesButton.getText().toString();
+        mOptionNames[1] = mNoButton.getText().toString();
+        return mOptionNames;
     }
 
     private void updateAnswers(int[] mAnswerCount){
@@ -93,6 +126,18 @@ public class MainActivity extends AppCompatActivity {
             mYesCountTextView.setText("0");
         }
 
+    }
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULTS_REQUEST_CODE && resultCode == RESULT_OK) {
+            String nextMove = data.getStringExtra(ResultsActivity.EXTRA_NEXT_MOVE);
+            if (nextMove.equals("reset")) {
+                reset();
+            }
+        }
     }
 
     @Override
