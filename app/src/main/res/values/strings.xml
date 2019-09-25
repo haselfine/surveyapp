@@ -15,4 +15,5 @@
     <string name="enter_question">enter question here</string>
     <string name="enter_answer">enter answer here</string>
     <string name="ready">Ready</string>
+    <string name="edit_button">Edit</string>
 </resources>

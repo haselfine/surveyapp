@@ -16,13 +16,16 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_RESULTS = "com.example.surveyapp.results";
 
     private static final int RESULTS_REQUEST_CODE = 0;
+    private static final int EDIT_REQUEST_CODE = 1;
 
 
     Button mYesButton;
     Button mNoButton;
     Button mResetButton;
     Button mResultsButton;
+    Button mEditButton;
 
+    TextView mQuestionTextView;
     TextView mYesCountTextView;
     TextView mNoCountTextView;
 
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_main);
 
+        mQuestionTextView = findViewById(R.id.question_textview);
         mYesCountTextView = findViewById(R.id.yes_count);
         mNoCountTextView = findViewById(R.id.no_count);
 
@@ -91,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(showResultsIntent, RESULTS_REQUEST_CODE);
             }
         });
+        mEditButton = findViewById(R.id.edit_button);
+        mEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent editIntent = new Intent(MainActivity.this, NameActivity.class);
+                startActivityForResult(editIntent, EDIT_REQUEST_CODE);
+            }
+        });
     }
 
     private void reset() {
@@ -99,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String concatText() {
+        mResultsConcat = new StringBuilder();
         if(mOptionNames[0] != null){
             for(int i = 0; i < mOptionNames.length; i++){
                 mResultsConcat.append(mOptionNames[i]);
@@ -131,11 +144,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULTS_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data == null){
+                return;
+            }
             String nextMove = data.getStringExtra(ResultsActivity.EXTRA_NEXT_MOVE);
             if (nextMove.equals("reset")) {
                 reset();
+            }
+        }
+
+        if (requestCode == EDIT_REQUEST_CODE && resultCode == RESULT_OK){
+            String[] userEdit = data.getStringArrayExtra(NameActivity.EXTRA_USER_INPUT);
+            if (userEdit != null){
+                mQuestionTextView.setText(userEdit[0]);
+                mYesButton.setText(userEdit[1]);
+                mNoButton.setText(userEdit[2]);
             }
         }
     }

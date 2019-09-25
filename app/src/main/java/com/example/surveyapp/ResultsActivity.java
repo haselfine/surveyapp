@@ -24,19 +24,22 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
-        Intent resultIntent = getIntent();
+        final Intent resultIntent = getIntent();
         mOptionNames = resultIntent.getStringExtra(MainActivity.EXTRA_RESULTS);
 
 
         mResultsText = findViewById(R.id.results_text);
+        mResultsText.setText("");
         mResultsText.setText(mOptionNames);
 
         mResetButton = findViewById(R.id.reset_button);
         mResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String nextMove = "reset";
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra(EXTRA_NEXT_MOVE, "reset");
+                returnIntent.putExtra(EXTRA_NEXT_MOVE, nextMove);
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -48,6 +51,7 @@ public class ResultsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(EXTRA_NEXT_MOVE, "continue");
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });
