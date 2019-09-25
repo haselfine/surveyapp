@@ -86,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
         mResultsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOptionNames = setOptionNames();
-                mResultsString = concatText();
+                mOptionNames = setOptionNames(); //finds names of options to add to results string
+                mResultsString = concatText(); //creates string of options and their click counts
 
                 Intent showResultsIntent = new Intent(MainActivity.this, ResultsActivity.class);
                 showResultsIntent.putExtra(EXTRA_RESULTS, mResultsString);
-                Log.d(TAG, "activity started");
+                Log.d(TAG, "results activity started");
                 startActivityForResult(showResultsIntent, RESULTS_REQUEST_CODE);
             }
         });
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent editIntent = new Intent(MainActivity.this, NameActivity.class);
+                Log.d(TAG, "naming activity started");
                 startActivityForResult(editIntent, EDIT_REQUEST_CODE);
             }
         });
@@ -111,21 +112,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String concatText() {
-        mResultsConcat = new StringBuilder();
-        if(mOptionNames[0] != null){
-            for(int i = 0; i < mOptionNames.length; i++){
+        mResultsConcat = new StringBuilder(); //creates empty string for reuse
+        if(mOptionNames[0] != null){ //avoid nullpointer errors
+            for(int i = 0; i < mOptionNames.length; i++){ //for each option in arrays (names0=yes, count0=yescount)
+                                                            // create label (yes: 4) and new line for next option
                 mResultsConcat.append(mOptionNames[i]);
                 mResultsConcat.append(": ");
                 mResultsConcat.append(mAnswerCount[i]);
                 mResultsConcat.append("\n");
             }
-            mResultsConcat.deleteCharAt(mResultsConcat.lastIndexOf("\n"));
+            mResultsConcat.deleteCharAt(mResultsConcat.lastIndexOf("\n")); //delete last newline as it's unnecessary
         }
-        return mResultsConcat.toString();
+        return mResultsConcat.toString(); //convert to string to send to results activity
     }
 
     private String[] setOptionNames(){
-        mOptionNames[0] = mYesButton.getText().toString();
+        mOptionNames[0] = mYesButton.getText().toString(); //converts button text to string
         mOptionNames[1] = mNoButton.getText().toString();
         return mOptionNames;
     }
@@ -145,11 +147,11 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult (int requestCode, int resultCode, Intent data) {
 
         if (requestCode == RESULTS_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data == null){
+            if (data == null){ //check for null data
                 return;
             }
-            String nextMove = data.getStringExtra(ResultsActivity.EXTRA_NEXT_MOVE);
-            if (nextMove.equals("reset")) {
+            String nextMove = data.getStringExtra(ResultsActivity.EXTRA_NEXT_MOVE); //string for what to do next
+            if (nextMove.equals("reset")) { //if the string says reset, go to reset method, clear count data
                 reset();
             }
         }
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == EDIT_REQUEST_CODE && resultCode == RESULT_OK){
             String[] userEdit = data.getStringArrayExtra(NameActivity.EXTRA_USER_INPUT);
             if (userEdit != null){
-                mQuestionTextView.setText(userEdit[0]);
+                mQuestionTextView.setText(userEdit[0]); //useredit contains 0: question, 1: answer1, 2: answer2
                 mYesButton.setText(userEdit[1]);
                 mNoButton.setText(userEdit[2]);
             }

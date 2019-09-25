@@ -17,7 +17,7 @@ public class ResultsActivity extends AppCompatActivity {
     Button mResetButton;
     Button mContinueButton;
 
-    String mOptionNames;
+    String mResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,21 +25,21 @@ public class ResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_results);
 
         final Intent resultIntent = getIntent();
-        mOptionNames = resultIntent.getStringExtra(MainActivity.EXTRA_RESULTS);
+        mResults = resultIntent.getStringExtra(MainActivity.EXTRA_RESULTS); //takes concatenated results string
 
 
         mResultsText = findViewById(R.id.results_text);
-        mResultsText.setText("");
-        mResultsText.setText(mOptionNames);
+        mResultsText.setText(""); //clear previous text (not sure this is necessary)
+        mResultsText.setText(mResults); //sets the textview text to concatenated results string
 
         mResetButton = findViewById(R.id.reset_button);
         mResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nextMove = "reset";
+                String nextMove = "reset"; //set string variable to reset
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra(EXTRA_NEXT_MOVE, nextMove);
-                setResult(RESULT_OK, returnIntent);
+                returnIntent.putExtra(EXTRA_NEXT_MOVE, nextMove); //send string variable back to main
+                setResult(RESULT_OK, returnIntent); //ok result, send intent
                 finish();
             }
         });
@@ -50,7 +50,7 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra(EXTRA_NEXT_MOVE, "continue");
+                returnIntent.putExtra(EXTRA_NEXT_MOVE, "continue"); //this honestly isn't necessary at the moment
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }

@@ -20,7 +20,7 @@ public class NameActivity extends AppCompatActivity {
 
     Button mReadyButton;
 
-    String[] mUserArray = new String[3];
+    String[] mUserArray = new String[3]; //this will hold the question and both answers for easy transfer to main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +37,13 @@ public class NameActivity extends AppCompatActivity {
         mReadyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mUserArray[0] = mUserQuestion.getText().toString();
+                mUserArray[0] = mUserQuestion.getText().toString(); //get text from edit text, convert to string
                 mUserArray[1] = mUserAnswerOne.getText().toString();
                 mUserArray[2] = mUserAnswerTwo.getText().toString();
 
                 Intent userIntent = new Intent();
-                userIntent.putExtra(EXTRA_USER_INPUT, mUserArray);
-                setResult(RESULT_OK, userIntent);
+                userIntent.putExtra(EXTRA_USER_INPUT, mUserArray); //send array of user input to main
+                setResult(RESULT_OK, userIntent); //result is okay only if user clicks "Ready"
                 finish();
             }
         });
